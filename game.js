@@ -79,7 +79,7 @@ class Gameboard {
   }
 }
 
-class Game {
+export class Game {
   #p1;
   #p2;
   #gameboard;
