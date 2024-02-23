@@ -1,8 +1,10 @@
 import { View } from "./view.js";
 import { Game } from "./game.js";
 
-let view = new View(3);
-view.initializeView(console.log);
+const size = 3;
 
-let game = new Game(3);
-//game.startGame();
+const game = new Game(size);
+game.initializeGame()
+
+const view = new View(size);
+view.initializeView(game.handleMove);

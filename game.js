@@ -90,6 +90,7 @@ export class Game {
     this.#p1 = new Player("X");
     this.#p2 = new Player("O");
     this.#gameboard = new Gameboard(size);
+    this.handleMove = this.handleMove.bind(this);
   }
   
   #switchPlayer() {
@@ -99,41 +100,23 @@ export class Game {
   #getActivePlayer() {
     return this.#activePlayer ? this.#p1 : this.#p2;
   }
-  
-  startGame() {
+
+  initializeGame() {
     this.#activePlayer = true;
     this.#winner = false;
-    this.#gameboard.initializeBoard();
-    // TODO: count is temp to prevent infinite loops while testing
-    // change this to a check on gameboard for existence of valid moves
-    // e.g. while (this.#gameboard.movesAvailable())
-    let count = 0;
-    while (count < 9) {
-      this.#nextMove(this.#getActivePlayer());
-      this.#checkWin();
-      if (this.#winner) break;
-      this.#switchPlayer();
-      count++;
-    }
-    console.log("The winner is", this.#winner);
+    this.#gameboard.initializeBoard();    
   }
 
-  #askForMove() {
-    return parseInt(prompt("What is your move?"));
+  handleMove(move) {
+    const mark = this.#getActivePlayer().getMark();
+    console.log(`Player ${mark} made move at`, move);
+    this.#gameboard.setMove(move, mark);
+    this.#checkWin();
+    this.#winner
+      ? console.log("Winner:", this.#winner)
+      : this.#switchPlayer();
   }
   
-  #nextMove(player) {
-    let move = false;
-    while (!move) {
-      move = this.#askForMove();
-      if (this.#gameboard.moveWithinRange(move)) {
-        break;
-      }
-      move = false;
-    }
-    console.log(move, player.getMark());
-    this.#gameboard.setMove(move, player.getMark());
-  }
   #checkWin() {
     this.#winner = this.#gameboard.getWinner();
   }
