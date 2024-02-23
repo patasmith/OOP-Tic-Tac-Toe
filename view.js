@@ -16,14 +16,32 @@ class Grid {
     return line;
   }
 
-  #createXMark() {
+  #createMark() {
     const mark = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     mark.setAttribute("viewBox", "0 0 100 100");
     mark.setAttribute("width", "100");
     mark.setAttribute("height", "100");
+    return mark;
+  }
+
+  #createXMark() {
+    const mark = this.#createMark();
     mark.appendChild(this.#createLine(10, 10, 90, 90));
     mark.appendChild(this.#createLine(90, 10, 10, 90));
     return mark
+  }
+
+  #createOMark() {
+    const mark = this.#createMark();
+    let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", 50);
+    circle.setAttribute("cy", 50);
+    circle.setAttribute("r", 45);
+    circle.setAttribute("stroke", "black");
+    circle.setAttribute("stroke-width", 2);
+    circle.setAttribute("fill", "none");
+    mark.appendChild(circle);
+    return mark;
   }
 
   #createDiv(className) {
@@ -38,7 +56,6 @@ class Grid {
     for (let i = 0; i < size ** 2; i++) {
       const square = this.#createDiv("square");
       square.id = i;
-      square.appendChild(this.#createXMark());
       wrapper.appendChild(square);
     }
     return wrapper;
@@ -52,7 +69,14 @@ class Grid {
     const squares = this.#elements.children;
     for (let square of squares) {
       square.addEventListener("click", () => {
-	action(square.id);
+	const mark = action(square.id);
+	if (square.children.length === 0) {
+	  if (mark === "X") {
+	    square.appendChild(this.#createXMark());
+	  } else if (mark === "O") {
+	    square.appendChild(this.#createOMark());
+	  }
+	}
       });
     }
   }

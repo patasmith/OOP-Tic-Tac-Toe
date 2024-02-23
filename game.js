@@ -115,6 +115,7 @@ export class Game {
     this.#winner
       ? console.log("Winner:", this.#winner)
       : this.#switchPlayer();
+    return mark;
   }
   
   #checkWin() {
