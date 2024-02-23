@@ -25,6 +25,15 @@ class Grid {
   getElements() {
     return this.#elements;
   }
+
+  applyAction(action) {
+    const squares = this.#elements.children;
+    for (let square of squares) {
+      square.addEventListener("click", () => {
+	action(square.id);
+      });
+    }
+  }
 }
 
 export class View {
@@ -34,13 +43,9 @@ export class View {
     this.#grid = new Grid(size);
   }
 
-  initializeView() {
-    document.body.appendChild(this.#grid.getElements());
-    const squares = document.getElementsByClassName("square");
-    for (let square of squares) {
-      square.addEventListener("click", () => {
-	console.log(square.id);
-      });
-    }
+  initializeView(action) {
+    const elements = this.#grid.getElements();
+    document.body.appendChild(elements);
+    this.#grid.applyAction(action);
   }
 }
