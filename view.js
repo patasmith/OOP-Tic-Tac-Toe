@@ -3,7 +3,6 @@ class Grid {
 
   constructor(size) {
     this.#elements = this.#makeGrid(size);
-    console.log(this.#elements);
   }
 
   #createDiv(className) {
@@ -15,12 +14,10 @@ class Grid {
   #makeGrid(size) {
     const wrapper = this.#createDiv("wrapper");
     wrapper.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
-    for (let row = 0; row < size; row++) {
-      const rowDiv = this.#createDiv("row");
-      for (let col = 0; col < size; col++) {
-	rowDiv.appendChild(this.#createDiv("square"));
-      }
-      wrapper.appendChild(rowDiv);
+    for (let i = 0; i < size ** 2; i++) {
+      const square = this.#createDiv("square");
+      square.id = i;
+      wrapper.appendChild(square);
     }
     return wrapper;
   }
@@ -39,5 +36,11 @@ export class View {
 
   initializeView() {
     document.body.appendChild(this.#grid.getElements());
+    const squares = document.getElementsByClassName("square");
+    for (let square of squares) {
+      square.addEventListener("click", () => {
+	console.log(square.id);
+      });
+    }
   }
 }

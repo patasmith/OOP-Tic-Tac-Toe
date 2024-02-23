@@ -22,7 +22,7 @@ class Gameboard {
   }
   
   #rangeToBoard() {
-    let range = [...this.#range];
+    const range = [...this.#range];
     this.#board = [];
     while (range.length > 0) {
       this.#board.push(range.splice(0, this.#size));
@@ -47,7 +47,7 @@ class Gameboard {
   }
   #verticalMatch() {
     for (let col = 0; col < this.#size; col++) {
-      let column = this.#board.map(row => row[col]);
+      const column = this.#board.map(row => row[col]);
       if (column.every((row, _, c) => row === c[0])) {
         return column[0];
       }
@@ -55,14 +55,14 @@ class Gameboard {
     return false;
   }
   #leftDiagonalMatch() {
-    let match = [];
+    const match = [];
     for (let i = 0; i < this.#size; i++) {
       match.push(this.#board[i][i]);
     }
     return match.every((move, _, m) => move === m[0]) ? match[0] : false;
   }
   #rightDiagonalMatch() {
-    let match = [];
+    const match = [];
     let col = this.#size;
     for (let row = 0; row < this.#size; row++) {
       col--;
@@ -105,6 +105,8 @@ export class Game {
     this.#winner = false;
     this.#gameboard.initializeBoard();
     // TODO: count is temp to prevent infinite loops while testing
+    // change this to a check on gameboard for existence of valid moves
+    // e.g. while (this.#gameboard.movesAvailable())
     let count = 0;
     while (count < 9) {
       this.#nextMove(this.#getActivePlayer());
